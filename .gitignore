@@ -1,0 +1,10 @@
+# WordPress plugin build artifacts
+node_modules/
+vendor/
+composer.lock
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.zip
+*.tar.gz
