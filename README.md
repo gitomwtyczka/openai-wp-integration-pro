@@ -37,6 +37,47 @@ Podstawowy szkielet wtyczki WordPress integrującej OpenAI/ChatGPT i YouTube.
   ```
 - Po pomyślnej aktualizacji odpowiedź zawiera zwrócone przez YouTube informacje o filmie (tytuł, opis, tagi, kategoria).
 
+## OpenAI Integration
+- W panelu **Ustawienia → OpenAI Integration** uzupełnij pole **OpenAI API Key** oraz wybierz model z listy (np. `gpt-4`, `gpt-4o`, `gpt-3.5-turbo`).
+- Endpointy REST wymagają uprawnień `edit_posts` i wykorzystują zapisany klucz i model.
+
+### Endpointy REST
+- `POST /wp-json/owp/v1/openai/summarize`
+  - Parametry: `text` (tekst do streszczenia) lub `video_id`/`video_url` (pobierze opis z YouTube), opcjonalnie nagłówek autoryzacji WordPress.
+  - Zwraca pole `summary`.
+- `POST /wp-json/owp/v1/openai/titles`
+  - Parametry: `text` oraz `count` (liczba tytułów, domyślnie 3).
+  - Zwraca tablicę `titles`.
+- `POST /wp-json/owp/v1/openai/description`
+  - Parametry: `text` (tekst źródłowy).
+  - Zwraca pole `description`.
+
+### Przykładowe wywołania cURL
+- Streszczenie krótkiego tekstu:
+  ```bash
+  curl -X POST "https://twoja-domena.pl/wp-json/owp/v1/openai/summarize" \
+       -H "Content-Type: application/json" \
+       -d '{"text": "WordPress to popularny CMS umożliwiający tworzenie stron i blogów."}'
+  ```
+- Tytuły (5 propozycji):
+  ```bash
+  curl -X POST "https://twoja-domena.pl/wp-json/owp/v1/openai/titles" \
+       -H "Content-Type: application/json" \
+       -d '{"text": "Artykuł o optymalizacji SEO w WordPressie", "count": 5}'
+  ```
+- Opis/metaopis SEO:
+  ```bash
+  curl -X POST "https://twoja-domena.pl/wp-json/owp/v1/openai/description" \
+       -H "Content-Type: application/json" \
+       -d '{"text": "Dowiedz się jak przyspieszyć swoją stronę na WordPressie za pomocą cache i optymalizacji obrazów."}'
+  ```
+- Streszczenie opisu filmu z YouTube:
+  ```bash
+  curl -X POST "https://twoja-domena.pl/wp-json/owp/v1/openai/summarize" \
+       -H "Content-Type: application/json" \
+       -d '{"video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}'
+  ```
+
 ## Instalacja
 1. Sklonuj repozytorium do katalogu `wp-content/plugins/`.
 2. Aktywuj wtyczkę w panelu WordPress.

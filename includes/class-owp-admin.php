@@ -71,6 +71,49 @@ class Owp_Admin {
             'owp_integration_pro',
             'owp_youtube_section'
         );
+
+        register_setting(
+            'owp_integration_pro_settings',
+            'owp_openai_api_key',
+            array(
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                'default'           => '',
+            )
+        );
+
+        register_setting(
+            'owp_integration_pro_settings',
+            'owp_openai_model',
+            array(
+                'type'              => 'string',
+                'sanitize_callback' => array( $this, 'sanitize_model' ),
+                'default'           => 'gpt-4',
+            )
+        );
+
+        add_settings_section(
+            'owp_openai_section',
+            __( 'OpenAI', 'openai-wp-integration-pro' ),
+            array( $this, 'render_openai_section' ),
+            'owp_integration_pro'
+        );
+
+        add_settings_field(
+            'owp_openai_api_key',
+            __( 'OpenAI API Key', 'openai-wp-integration-pro' ),
+            array( $this, 'render_openai_api_key_field' ),
+            'owp_integration_pro',
+            'owp_openai_section'
+        );
+
+        add_settings_field(
+            'owp_openai_model',
+            __( 'OpenAI Model', 'openai-wp-integration-pro' ),
+            array( $this, 'render_openai_model_field' ),
+            'owp_integration_pro',
+            'owp_openai_section'
+        );
     }
 
     /**
@@ -139,6 +182,71 @@ class Owp_Admin {
             ?>
         </p>
         <?php
+    }
+
+    /**
+     * Render description for OpenAI settings section.
+     *
+     * @return void
+     */
+    public function render_openai_section() {
+        echo '<p>' . esc_html__( 'Configure your OpenAI credentials to generate summaries, titles, and descriptions directly in WordPress.', 'openai-wp-integration-pro' ) . '</p>';
+        echo '<p>' . esc_html__( 'You can create and manage API keys from the OpenAI platform.', 'openai-wp-integration-pro' ) . '</p>';
+    }
+
+    /**
+     * Render OpenAI API key field.
+     *
+     * @return void
+     */
+    public function render_openai_api_key_field() {
+        $api_key = get_option( 'owp_openai_api_key', '' );
+        ?>
+        <input
+            type="text"
+            id="owp_openai_api_key"
+            name="owp_openai_api_key"
+            value="<?php echo esc_attr( $api_key ); ?>"
+            class="regular-text"
+            placeholder="<?php esc_attr_e( 'Enter your OpenAI API key', 'openai-wp-integration-pro' ); ?>"
+        />
+        <?php
+    }
+
+    /**
+     * Render OpenAI model selection field.
+     *
+     * @return void
+     */
+    public function render_openai_model_field() {
+        $model   = get_option( 'owp_openai_model', 'gpt-4' );
+        $choices = array(
+            'gpt-4'          => __( 'GPT-4', 'openai-wp-integration-pro' ),
+            'gpt-4o'         => __( 'GPT-4o', 'openai-wp-integration-pro' ),
+            'gpt-3.5-turbo'  => __( 'GPT-3.5 Turbo', 'openai-wp-integration-pro' ),
+        );
+        ?>
+        <select id="owp_openai_model" name="owp_openai_model">
+            <?php foreach ( $choices as $value => $label ) : ?>
+                <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $model, $value ); ?>>
+                    <?php echo esc_html( $label ); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <?php
+    }
+
+    /**
+     * Sanitize selected OpenAI model against allowed options.
+     *
+     * @param string $value Raw model value.
+     *
+     * @return string
+     */
+    public function sanitize_model( $value ) {
+        $allowed = array( 'gpt-4', 'gpt-4o', 'gpt-3.5-turbo' );
+
+        return in_array( $value, $allowed, true ) ? $value : 'gpt-4';
     }
 
     /**

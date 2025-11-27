@@ -3,7 +3,7 @@
  * Plugin Name:       OpenAI WP Integration Pro
  * Plugin URI:        https://example.com/openai-wp-integration-pro
  * Description:       Integracja WordPress z OpenAI/ChatGPT i YouTube.
- * Version:           0.3.0
+ * Version:           0.4.0
  * Author:            Your Name
  * Author URI:        https://example.com
  * License:           GPL-2.0-or-later
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OWP_INTEGRATION_PRO_VERSION', '0.3.0' );
+define( 'OWP_INTEGRATION_PRO_VERSION', '0.4.0' );
 define( 'OWP_INTEGRATION_PRO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OWP_INTEGRATION_PRO_URL', plugin_dir_url( __FILE__ ) );
 

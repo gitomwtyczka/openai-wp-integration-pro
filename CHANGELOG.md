@@ -1,5 +1,8 @@
 # Changelog
 
+# [0.4.0] - 2024-08-01
+- Dodano integrację z OpenAI: ustawienia klucza i modelu, nowe endpointy REST do generowania streszczeń, tytułów i opisów.
+
 # [0.3.0] - 2024-07-01
 - Dodano możliwość aktualizacji tytułu, opisu, tagów i kategorii filmów YouTube wraz z konfiguracją tokenu OAuth 2.0 i nowym endpointem REST.
 
